@@ -54,6 +54,7 @@ const Header = () => {
       >
         <div className="container">
           <div className="relative -mx-4 flex items-center justify-between">
+            {/* Logo */}
             <div className="w-60 max-w-full px-4">
               <Link
                 href="/"
@@ -146,7 +147,7 @@ const Header = () => {
                       : "invisible top-[120%] opacity-0"
                   }`}
                 >
-                  <ul className="block lg:ml-8 lg:flex lg:gap-x-8 xl:ml-14 xl:gap-x-12">
+                  {/* <ul className="block lg:ml-8 lg:flex lg:gap-x-8 xl:ml-14 xl:gap-x-12">
                     {menuData.map((menuItem, index) =>
                       menuItem.path ? (
                         <li key={index} className="group relative">
@@ -255,7 +256,7 @@ const Header = () => {
                         </li>
                       ),
                     )}
-                  </ul>
+                  </ul> */}
                 </nav>
               </div>
               <div className="hidden items-center justify-end pr-16 sm:flex lg:pr-0">
@@ -286,7 +287,7 @@ const Header = () => {
                   </span>
                 </button>
 
-                {session?.user ? (
+                {/* {session?.user ? (
                   <>
                     <p
                       className={`loginBtn px-7 py-3 text-base font-medium ${
@@ -351,7 +352,7 @@ const Header = () => {
                       </>
                     )}
                   </>
-                )}
+                )} */}
               </div>
             </div>
           </div>
