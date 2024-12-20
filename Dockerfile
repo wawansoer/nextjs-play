@@ -14,7 +14,7 @@ ARG NODE_ENV
 ENV NODE_ENV=”${NODE_ENV}”
 RUN npm run build
 
-FROM mhart/alpine-node:slim-18 AS runner
+FROM node:18-alpine AS runner
 WORKDIR /home/app
 ENV NEXT_TELEMETRY_DISABLED 1
 COPY --from=builder /home/app/.next/standalone ./standalone
