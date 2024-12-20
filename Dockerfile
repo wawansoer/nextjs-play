@@ -10,6 +10,8 @@ COPY package*.json ./
 # Install production dependencies
 RUN npm ci
 
+RUN npx prisma generate
+
 # Copy the rest of the application code into the container
 COPY . .
 
