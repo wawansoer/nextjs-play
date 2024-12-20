@@ -229,10 +229,7 @@ export default async function Post({ params }: Props) {
             </div>
 
             {posts.slice(0, 3).map((blog, key) => (
-              <div
-                key={key}
-                className="w-full px-4 md:w-2/3 lg:w-1/2 xl:w-1/3"
-              >
+              <div key={key} className="w-full px-4 md:w-2/3 lg:w-1/2 xl:w-1/3">
                 <SingleBlog blog={blog} />
               </div>
             ))}

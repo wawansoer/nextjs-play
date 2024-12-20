@@ -30,7 +30,7 @@
     "remark": "^15.0.1",
     "remark-html": "^16.0.1",
     "remult": "^0.27.24",
-    "stripe": "^14.7.0",
+    "sharp": "^0.33.5",
     "tailgrids": "^2.2.7"
   },
   "devDependencies": {
