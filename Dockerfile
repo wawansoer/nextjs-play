@@ -1,25 +1,25 @@
-# Use the official Node.js 18 base image
-FROM node:18-alpine
-
-# Set the working directory in the container
-WORKDIR /app
-
-# Copy package.json and package-lock.json to install dependencies
-COPY package*.json ./
-
-# Install production dependencies
-RUN npm ci
-
-RUN npx prisma generate
-
-# Copy the rest of the application code into the container
+FROM node:18-alpine AS dependencies
+RUN apk add --no-cache libc6-compat
+WORKDIR /home/app
+COPY package.json ./
+COPY package-lock.json ./
+RUN npm iFROM node:16-alpine AS builder
+WORKDIR /home/app
+COPY --from=dependencies /home/app/node_modules ./node_modules
 COPY . .
-
-# Build the Next.js application
+ENV NEXT_TELEMETRY_DISABLED 1
+ARG NODE_ENV
+ENV NODE_ENV=”${NODE_ENV}”
 RUN npm run build
 
-# Expose the port the app runs on
-EXPOSE 3000
+FROM mhart/alpine-node:slim-18 AS runner
 
-# Start the Next.js production server
-CMD ["npm", "start"]
+WORKDIR /home/app
+ENV NEXT_TELEMETRY_DISABLED 1
+
+COPY --from=builder /home/app/.next/standalone ./standalone
+COPY --from=builder /home/app/public /home/app/standalone/public
+COPY --from=builder /home/app/.next/static /home/app/standalone/.next/static
+
+EXPOSE 3000
+ENV PORT 3000CMD [“node”, “./standalone/server.js”]
