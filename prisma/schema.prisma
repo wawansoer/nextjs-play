@@ -8,7 +8,8 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl"]
 }
 
 model Account {
@@ -59,14 +60,13 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-
 model Blog {
-  id          String   @id @default(uuid())
-  title       String?
-  slug        String?  @unique
-  excerpt     String?
-  coverImage  String?
-  date        DateTime
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String   @id @default(uuid())
+  title      String?
+  slug       String?  @unique
+  excerpt    String?
+  coverImage String?
+  date       DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
