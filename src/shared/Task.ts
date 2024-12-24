@@ -1,5 +1,5 @@
 
-import { Entity, Fields, remult, Validators } from 'remult'
+import { Entity, Fields, Validators } from 'remult'
 
 @Entity('Tasks', {
   allowApiCrud: "admin"
