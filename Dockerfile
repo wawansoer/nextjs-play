@@ -8,7 +8,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 COPY package.json yarn.lock* ./
-RUN npm --frozen-lockfile
+RUN npm install --omit=dev
 # Stage 2: Build the app
 FROM ${NODE} AS builder
 WORKDIR /app
