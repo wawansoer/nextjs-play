@@ -14,8 +14,8 @@ FROM ${NODE} AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+RUN ln -s /usr/lib/libssl.so.3 /lib/libssl.so.3
 RUN npx prisma generate
-RUN npx prisma migrate deploy
 RUN npm run build
 
 # Stage 3: Run the production
