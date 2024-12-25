@@ -8,7 +8,7 @@ RUN apk add --no-cache libc6-compat openssl
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm install
+RUN npm ci
 # Stage 2: Build the app
 FROM ${NODE} AS builder
 WORKDIR /app
