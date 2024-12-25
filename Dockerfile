@@ -2,27 +2,32 @@
 ARG NODE=node:20-alpine
 # Stage 1: Install dependencies
 FROM ${NODE} AS deps
-# RUN apk update && apk add --no-cache libc6-compat openssl
 RUN apk update \
     && apk add --no-cache openssl libc6-compat\
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/cache/apk/*
-WORKDIR /app
 
+WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
+
+
 # Stage 2: Build the app
 FROM ${NODE} AS builder
-RUN apk update \
-    && apk add --no-cache openssl libc6-compat \
-    && rm -rf /var/cache/apk/*
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+
 ARG DATABASE_URL
 ENV DATABASE_URL=$DATABASE_URL
 ARG NEXT_PUBLIC_APP_URL
 ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
+
+RUN apk update \
+    && apk add --no-cache openssl libc6-compat \
+    && rm -rf /var/cache/apk/*
+
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
 RUN npx prisma generate
 RUN npm run build
 
