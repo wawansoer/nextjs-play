@@ -8,15 +8,14 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 COPY package.json yarn.lock* ./
-RUN npm i --frozen-lockfile
-RUN npx prisma generate
-RUN npx prisma migrate deploy
+RUN npm ci
 # Stage 2: Build the app
 FROM ${NODE} AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-
+ENV NEXT_TELEMETRY_DISABLED 1
+RUN npx prisma generate
 RUN npm run build
 
 # Stage 3: Run the production
@@ -32,6 +31,7 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=runner --chown=nextjs:nodejs prisma ./prisma/
 
 USER nextjs
 
