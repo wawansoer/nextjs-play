@@ -2,7 +2,7 @@
 ARG NODE=arm64v8/node:20-alpine
 # Stage 1: Install dependencies
 FROM ${NODE} AS deps
-RUN apk add --no-cache libc6-compat openssl
+RUN apk add --no-cache libc6-compat openssl1.1
 WORKDIR /app
 
 COPY package.json package-lock.json ./
