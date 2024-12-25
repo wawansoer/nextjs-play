@@ -13,6 +13,9 @@ COPY package.json package-lock.json ./
 RUN npm ci
 # Stage 2: Build the app
 FROM ${NODE} AS builder
+RUN apk update \
+    && apk add --no-cache openssl libc6-compat \
+    && rm -rf /var/cache/apk/*
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -25,6 +28,10 @@ RUN npm run build
 
 # Stage 3: Run the production
 FROM ${NODE} AS runner
+RUN apk update \
+    && apk add --no-cache openssl libc6-compat \
+    && rm -rf /var/cache/apk/*
+
 WORKDIR /app
 
 RUN addgroup --system --gid 1001 nodejs
