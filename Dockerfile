@@ -1,7 +1,5 @@
 # Dockerfile
-
-ARG NODE=node:18-alpine
-
+ARG NODE=arm64v8/node:20-alpine
 # Stage 1: Install dependencies
 FROM ${NODE} AS deps
 RUN apk add --no-cache libc6-compat openssl
