@@ -287,7 +287,7 @@ const Header = () => {
                   </span>
                 </button>
 
-                {/* {session?.user ? (
+                {session?.user ? (
                   <>
                     <p
                       className={`loginBtn px-7 py-3 text-base font-medium ${
@@ -352,7 +352,7 @@ const Header = () => {
                       </>
                     )}
                   </>
-                )} */}
+                )}
               </div>
             </div>
           </div>
