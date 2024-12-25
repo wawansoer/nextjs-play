@@ -7,9 +7,8 @@ FROM ${NODE} AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-COPY package.json ./
-COPY package-lock.json ./
-RUN npm install --omit=dev
+COPY package.json package-lock.json ./
+RUN npm install
 # Stage 2: Build the app
 FROM ${NODE} AS builder
 WORKDIR /app
