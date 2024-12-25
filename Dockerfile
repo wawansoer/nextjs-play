@@ -34,4 +34,4 @@ USER nextjs
 EXPOSE 3000
 
 # Serve the app
-CMD ["node", ".next/standalone/server.js"]
+CMD ["node", "server.js"]
