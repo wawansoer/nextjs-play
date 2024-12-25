@@ -8,7 +8,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 COPY package.json yarn.lock* ./
-RUN npm ci
+RUN npm install --production
 # Stage 2: Build the app
 FROM ${NODE} AS builder
 WORKDIR /app
@@ -31,7 +31,7 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-COPY --from=runner --chown=nextjs:nodejs prisma ./prisma/
+COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma/
 
 USER nextjs
 
