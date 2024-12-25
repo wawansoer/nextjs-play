@@ -14,8 +14,8 @@ FROM ${NODE} AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npm run build
 RUN npx prisma generate
+RUN npm run build
 
 # Stage 3: Run the production
 FROM ${NODE} AS runner
