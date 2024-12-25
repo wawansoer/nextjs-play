@@ -16,7 +16,10 @@ FROM ${NODE} AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN ln -s /usr/lib/libssl.so.3 /lib/libssl.so.3
+ARG DATABASE_URL
+ENV DATABASE_URL=$DATABASE_URL
+ARG NEXT_PUBLIC_APP_URL
+ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
 RUN npx prisma generate
 RUN npm run build
 
