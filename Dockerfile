@@ -9,8 +9,8 @@ WORKDIR /app
 
 COPY package.json yarn.lock* ./
 RUN npm i --frozen-lockfile
-RUN npm prisma generate
-RUN npm prisma migrate deploy
+RUN npx prisma generate
+RUN npx prisma migrate deploy
 # Stage 2: Build the app
 FROM ${NODE} AS builder
 WORKDIR /app
