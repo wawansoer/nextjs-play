@@ -48,7 +48,7 @@ export async function POST(request: Request) {
       <div>
         <h1>You requested a password reset</h1>
         <p>Click the link below to reset your password</p>
-        <a href="${resetURL}" target="_blank">Reset Password</a>
+        <Link href="${resetURL}" target="_blank">Reset Password</a>
       </div>
       `,
 		});
