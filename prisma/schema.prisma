@@ -13,7 +13,7 @@ generator client {
 }
 
 model Account {
-  id                String  @id @default(uuid()) @db.Uuid
+  id                String  @id @default(uuid()) @db.Uuid 
   userId            String  @db.Uuid
   type              String
   provider          String
@@ -61,31 +61,29 @@ model VerificationToken {
 }
 
 model Blog {
-  id         String    @id @default(uuid()) @db.Uuid
-  title      String?
-  slug       String?   @unique
-  excerpt    String?
-  coverImage String?
-  content    String?
-  metaTitle  String?    
-  metaDesc   String?
-  published  Boolean   @default(false)
-  date       DateTime
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  BlogTag    BlogTag[]
+  id              String   @id @default(uuid()) @db.Uuid
+  title           String   @default("")
+  slug            String   @unique
+  metaTitle       String
+  metaDescription String
+  excerpt         String
+  coverImage      String
+  content         String
+  tags            String[]
+  author          String
+  canonicalUrl    String?
+  status          String   @default("draft")
+  views           Int      @default(0)
+  likes           Int      @default(0)
+  date            DateTime
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 model Tag {
-  id      String @id @default(uuid()) @db.Uuid
-  name    String @unique
-  BlogTag BlogTag[]
-}
-
-model BlogTag {
-  id     String @id @default(uuid()) @db.Uuid
-  blogId String @db.Uuid
-  tagId  String @db.Uuid
-  blog   Blog   @relation(fields: [blogId], references: [id])
-  tag    Tag    @relation(fields: [tagId], references: [id])
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
