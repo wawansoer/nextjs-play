@@ -1,5 +1,6 @@
 # Dockerfile
 ARG NODE=node:20-alpine
+
 # Stage 1: Install dependencies
 FROM ${NODE} AS deps
 RUN apk update \
@@ -9,8 +10,7 @@ RUN apk update \
 
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm install --omit=dev
-
+RUN npm ci
 
 # Stage 2: Build the app
 FROM ${NODE} AS builder
@@ -19,6 +19,7 @@ ARG DATABASE_URL
 ENV DATABASE_URL=$DATABASE_URL
 ARG NEXT_PUBLIC_APP_URL
 ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
+ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN apk update \
     && apk add --no-cache openssl libc6-compat \
