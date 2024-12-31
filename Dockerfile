@@ -25,7 +25,6 @@ RUN apk update \
     && rm -rf /var/cache/apk/*
 
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 RUN npx prisma generate
