@@ -9,7 +9,7 @@ RUN apk update \
 
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm install --omit=dev
 
 
 # Stage 2: Build the app
@@ -49,7 +49,6 @@ COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 
 USER nextjs
 
-EXPOSE 3000
-
+EXPOSE 300
 # Serve the app
 CMD ["node", "server.js"]
