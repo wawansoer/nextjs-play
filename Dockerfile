@@ -50,6 +50,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 
 USER nextjs
 
-EXPOSE 3000
+ARG PORT=3000
+EXPOSE ${PORT}
+
 # Serve the app
 CMD ["node", "server.js"]
