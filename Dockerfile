@@ -50,6 +50,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 
 USER nextjs
 
+ARG HOSTNAME="0.0.0.0"
+ENV HOSTNAME=${HOSTNAME}
+
 ARG PORT=3000
 EXPOSE ${PORT}
 
