@@ -37,16 +37,11 @@ RUN apt-get update \
 
 WORKDIR /app
 
-RUN addgroup --system --gid 999 nodejs
-RUN adduser --system --uid 999 nextjs
-
 # Copy assets and the generated standalone server
 COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
-
-USER nextjs
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/prisma ./prisma
 
 ARG HOSTNAME="0.0.0.0"
 ENV HOSTNAME=${HOSTNAME}
