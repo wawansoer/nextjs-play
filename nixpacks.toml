@@ -10,7 +10,7 @@ NEXT_TELEMETRY_DISABLED = '1'
 
 [phases.build]
 dependsOn = ['install']
-cmds = ['npm run build']
+cmds = ['npm run build', 'npx prisma generate']
 cacheDirectories = ['.next/cache', 'node_modules/.cache']
 
 [phases.install]
