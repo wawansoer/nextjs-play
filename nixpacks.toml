@@ -14,7 +14,7 @@ onlyIncludeFiles = [
     'package-lock.json',
     'next.config.js',
     'tsconfig.json',
-    '.next/standalone',
+    '.next/**',
     'public',
     'prisma',
 ]
