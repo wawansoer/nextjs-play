@@ -15,7 +15,6 @@ onlyIncludeFiles = [
     'next.config.js',
     'tsconfig.json',
     '.next/standalone',
-    '.next/static',
     'public',
     'prisma',
 ]
