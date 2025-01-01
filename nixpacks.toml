@@ -14,6 +14,8 @@ onlyIncludeFiles = [
     'package-lock.json',
     'next.config.js',
     'tsconfig.json',
+    '.next/standalone',
+    '.next/static',
     'public',
     'prisma',
 ]
@@ -21,7 +23,7 @@ cacheDirectories = ['.next/cache', 'node_modules/.cache']
 
 [phases.install]
 dependsOn = ['setup']
-cmds = ['npm install --omit=dev']
+cmds = ['npm install']
 cacheDirectories = ['/root/.npm']
 paths = ['/app/node_modules/.bin']
 
