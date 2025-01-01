@@ -1,0 +1,37 @@
+providers = ['node']
+buildImage = 'ghcr.io/railwayapp/nixpacks:debian-1733184274'
+
+[variables]
+CI = 'true'
+NIXPACKS_METADATA = 'node'
+NODE_ENV = 'production'
+NPM_CONFIG_PRODUCTION = 'false'
+[phases.build]
+dependsOn = ['install']
+cmds = ['npm run build']
+onlyIncludeFiles = [
+    'package.json',
+    'package-lock.json',
+    'next.config.js',
+    'tsconfig.json',
+    'public',
+    'prisma',
+]
+cacheDirectories = ['.next/cache', 'node_modules/.cache']
+
+[phases.install]
+dependsOn = ['setup']
+cmds = ['npm install --omit=dev']
+cacheDirectories = ['/root/.npm']
+paths = ['/app/node_modules/.bin']
+
+[phases.setup]
+nixPkgs = ['nodejs_18', 'npm-9_x', 'openssl']
+nixLibs = ['gcc-unwrapped']
+nixOverlays = [
+    'https://github.com/railwayapp/nix-npm-overlay/archive/main.tar.gz',
+]
+nixpkgsArchive = '5624e1334b26ddc18da37e132b6fa8e93b481468'
+
+[start]
+cmd = 'node .next/standalone/server.js'
