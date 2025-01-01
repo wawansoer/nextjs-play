@@ -15,20 +15,13 @@ cacheDirectories = ['.next/cache', 'node_modules/.cache']
 
 [phases.install]
 dependsOn = ['setup']
-cmds = ['npm install', 'npm run build']
+cmds = ['npm install']
 cacheDirectories = ['/root/.npm']
 paths = ['/app/node_modules/.bin']
 
 [phases.setup]
 nixPkgs = ['nodejs_18', 'npm-9_x', 'openssl']
 nixLibs = ['gcc-unwrapped']
-onlyIncludeFiles = [
-    'public',
-    '.next',
-    'tsconfig.json',
-    'package.json',
-    'package-lock.json',
-]
 nixOverlays = [
     'https://github.com/railwayapp/nix-npm-overlay/archive/main.tar.gz',
 ]
@@ -36,11 +29,4 @@ nixpkgsArchive = '5624e1334b26ddc18da37e132b6fa8e93b481468'
 
 [start]
 dependsOn = ['build']
-onlyIncludeFiles = [
-    'public',
-    '.next',
-    'tsconfig.json',
-    'package.json',
-    'package-lock.json',
-]
 cmd = 'node .next/standalone/server.js'
