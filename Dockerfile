@@ -1,10 +1,12 @@
-ARG NODE=node:20-slim
+# Dockerfile
+ARG NODE=node:20-alpine
 
 # Stage 1: Install dependencies
 FROM ${NODE} AS deps
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends openssl libc6-compat \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apk update \
+    && apk add --no-cache openssl libc6-compat\
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /var/cache/apk/*
 
 WORKDIR /app
 COPY package.json package-lock.json ./
@@ -19,9 +21,9 @@ ARG NEXT_PUBLIC_APP_URL
 ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
 ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends openssl \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apk update \
+    && apk add --no-cache openssl libc6-compat \
+    && rm -rf /var/cache/apk/*
 
 WORKDIR /app
 COPY . .
@@ -31,17 +33,22 @@ RUN npm run build
 
 # Stage 3: Run the production
 FROM ${NODE} AS runner
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends openssl \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apk update \
+    && apk add --no-cache openssl libc6-compat \
+    && rm -rf /var/cache/apk/*
 
 WORKDIR /app
 
-# Copy assets and the generated standalone server
+RUN addgroup --system --gid 999 nodejs
+RUN adduser --system --uid 999 nextjs
+
+# copy assets and the generated standalone server
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/prisma ./prisma
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+
+USER nextjs
 
 ARG HOSTNAME="0.0.0.0"
 ENV HOSTNAME=${HOSTNAME}
