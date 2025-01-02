@@ -40,18 +40,9 @@ RUN mkdir -p /app/scheduler /app/logs
 RUN touch /app/logs/scheduler.log
 RUN chown -R nextjs:nodejs /app/logs
 
-
-# Create startup script
-COPY --chown=nextjs:nodejs <<EOF /app/start.sh
-#!/bin/sh
-node /app/cron/cron.js &
-node server.js
-EOF
-
-RUN chmod +x /app/start.sh
-
 # Copy scheduler
 COPY --from=builder --chown=nextjs:nodejs /app/cron ./cron
+COPY --from=builder --chown=nextjs:nodejs /app/start.sh ./start.sh
 
 # copy assets and the generated standalone server
 COPY --from=builder /app/public ./public

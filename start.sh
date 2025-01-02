@@ -1,3 +1,3 @@
 #!/bin/sh
-/usr/sbin/crond -f -l 8 &
+node /app/cron/cron.js &
 node server.js
