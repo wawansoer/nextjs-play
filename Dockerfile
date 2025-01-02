@@ -39,8 +39,8 @@ RUN apk update \
 
 WORKDIR /app
 
-RUN addgroup --system --gid 999 nodejs
-RUN adduser --system --uid 999 nextjs
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
 # copy assets and the generated standalone server
 COPY --from=builder /app/public ./public
