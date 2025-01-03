@@ -13,4 +13,4 @@ async function runTask() {
 // Run immediately on start
 runTask();
 
-setInterval(runTask, process.env.CRON_INTERVAL || 10000);
+setInterval(runTask, process.env.CRON_INTERVAL || 1000 * 60 * 60 * 3);
