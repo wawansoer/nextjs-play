@@ -1,16 +1,16 @@
-const fs = require("fs");
-const path = require("path");
+const mistral = require("./mistral");
+const logger = require("./logger");
 
 // Function to run your task
 async function runTask() {
-  const cronInterval = process.env.CRON_INTERVAL || 300000;
-  const now = new Date().toISOString();
-  const logMessage = `Task executed at ${now} ${cronInterval}\n`;
+  const result = await mistral(
+    "What is the best programming language for web development?",
+  );
 
-  fs.appendFileSync(path.join("/app/logs/scheduler.log"), logMessage);
+  logger("Task ran successfully", JSON.stringify(result));
 }
 
 // Run immediately on start
 runTask();
 
-setInterval(runTask, 300000);
+setInterval(runTask, process.env.CRON_INTERVAL || 10000);
