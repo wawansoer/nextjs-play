@@ -1,7 +1,8 @@
 const mistral = async (content) => {
-  const agentId = process.env.MISTRAL_AGENT_ID;
-  const secret = process.env.MISTRAL_SECRET;
+  const agentId = process.env?.MISTRAL_AGENT_ID;
+  const secret = process.env?.MISTRAL_SECRET;
 
+  console.log(agentId, secret);
   const myHeaders = new Headers();
   myHeaders.append("Authorization", "Bearer " + secret);
   myHeaders.append("Content-Type", "application/json");

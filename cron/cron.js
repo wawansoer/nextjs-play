@@ -7,7 +7,10 @@ async function runTask() {
     "What is the best programming language for web development?",
   );
 
-  logger("Task ran successfully", JSON.stringify(result));
+  const agentId = process.env?.MISTRAL_AGENT_ID;
+  const secret = process.env?.MISTRAL_SECRET;
+
+  logger("Task ran successfully", agentId + " " + secret);
 }
 
 // Run immediately on start
