@@ -3,8 +3,9 @@ const path = require("path");
 
 // Function to run your task
 async function runTask() {
+  const cronInterval = process.env.CRON_INTERVAL || 300000;
   const now = new Date().toISOString();
-  const logMessage = `Task executed at ${now}\n`;
+  const logMessage = `Task executed at ${now} ${cronInterval}\n`;
 
   fs.appendFileSync(path.join("/app/logs/scheduler.log"), logMessage);
 }
@@ -12,5 +13,4 @@ async function runTask() {
 // Run immediately on start
 runTask();
 
-// Then run every second
 setInterval(runTask, 300000);
