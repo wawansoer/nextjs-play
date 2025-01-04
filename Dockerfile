@@ -7,7 +7,7 @@ RUN apk update \
     && rm -rf /var/cache/apk/*
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm install --frozen-lockfile
+RUN npm install
 
 # Stage 2: Build the app
 FROM ${NODE} AS builder
@@ -16,9 +16,11 @@ ENV DATABASE_URL=$DATABASE_URL
 ARG NEXT_PUBLIC_APP_URL
 ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
 ENV NEXT_TELEMETRY_DISABLED=1
+
 RUN apk update \
     && apk add --no-cache openssl libc6-compat \
     && rm -rf /var/cache/apk/*
+
 WORKDIR /app
 COPY . .
 RUN npx prisma generate
