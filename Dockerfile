@@ -59,4 +59,4 @@ ARG PORT=3000
 EXPOSE ${PORT}
 
 # Use the startup script
-CMD ["/app/start.sh"]
+CMD ["node", "server.js"]
