@@ -7,7 +7,7 @@ RUN apk update \
     && rm -rf /var/cache/apk/*
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm install
+RUN npm ci
 
 # Stage 2: Build the app
 FROM ${NODE} AS builder
@@ -59,4 +59,4 @@ ARG PORT=3000
 EXPOSE ${PORT}
 
 # Use the startup script
-CMD ["node", "server.js"]
+CMD ["/app/start.sh"]
