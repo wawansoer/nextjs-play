@@ -8,12 +8,13 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl"]
 }
 
 model Account {
-  id                String  @id @default(cuid())
-  userId            String
+  id                String  @id @default(uuid()) @db.Uuid 
+  userId            String  @db.Uuid
   type              String
   provider          String
   providerAccountId String
@@ -31,15 +32,15 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  id           String   @id @default(uuid()) @db.Uuid
   sessionToken String   @unique
-  userId       String
+  userId       String   @db.Uuid
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
-  id                    String    @id @default(cuid())
+  id                    String @id @default(uuid()) @db.Uuid
   name                  String?
   email                 String?   @unique
   emailVerified         DateTime?
@@ -59,14 +60,30 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-
 model Blog {
-  id          String   @id @default(uuid())
-  title       String?
-  slug        String?  @unique
-  excerpt     String?
-  coverImage  String?
-  date        DateTime
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              String   @id @default(uuid()) @db.Uuid
+  title           String   @default("")
+  slug            String   @unique
+  metaTitle       String
+  metaDescription String
+  excerpt         String
+  coverImage      String
+  content         String
+  tags            String[]
+  author          String
+  canonicalUrl    String?
+  status          String   @default("draft")
+  views           Int      @default(0)
+  likes           Int      @default(0)
+  date            DateTime
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Tag {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
