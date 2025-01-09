@@ -3,6 +3,23 @@ import { NextResponse } from "next/server";
 import crypto from "crypto";
 import { sendEmail } from "@/utils/email";
 
+/**
+ * Handles password reset request for a user.
+ *
+ * @remarks
+ * This asynchronous function processes a password reset request by:
+ * - Validating the email address
+ * - Generating a time-limited reset token
+ * - Updating the user's reset token in the database
+ * - Sending a password reset email
+ *
+ * @param request - The incoming HTTP request containing user email
+ * @returns A NextResponse with the result of the password reset process
+ *
+ * @throws {NextResponse} - Returns error responses for missing email, non-existent user, or email sending failures
+ *
+ * @beta
+ */
 export async function POST(request: Request) {
 	const body = await request.json();
 	const { email } = body;
