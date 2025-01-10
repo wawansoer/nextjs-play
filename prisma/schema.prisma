@@ -89,77 +89,77 @@ generator client {
 // }
 
 model Author {
-  id             String    @id @default(cuid())
-  name           String    @db.VarChar(255)
-  bio            String?
-  profilePicture String?   @db.VarChar(255)
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  blogs          Blog[]
+  Id             String    @id @default(cuid())
+  Name           String    @db.VarChar(255)
+  Bio            String?
+  ProfilePicture String?   @db.VarChar(255)
+  CreatedAt      DateTime  @default(now())
+  UpdatedAt      DateTime  @updatedAt
+  Blogs          Blog[]
 }
 
 model Blog {
-  id             String          @id @default(cuid())
-  authorId       String
-  title          String          @db.VarChar(255)
-  slug           String          @db.VarChar(255)
-  metaDescription String?        @db.VarChar(255)
-  content        String
-  featuredImage  String?         @db.VarChar(255)
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  publishedAt    DateTime?
-  status         String?         @db.VarChar(255)
-  author         Author          @relation(fields: [authorId], references: [id])
-  media          Media[]
-  categories     BlogCategory[]
-  tags           BlogTag[]
+  Id             String          @id @default(cuid())
+  AuthorId       String
+  Title          String          @db.VarChar(255)
+  Slug           String          @db.VarChar(255)
+  MetaDescription String?        @db.VarChar(255)
+  Content        String
+  FeaturedImage  String?         @db.VarChar(255)
+  CreatedAt      DateTime        @default(now())
+  UpdatedAt      DateTime        @updatedAt
+  PublishedAt    DateTime?
+  Status         String?         @db.VarChar(255)
+  Author         Author          @relation(fields: [AuthorId], references: [Id])
+  Media          Media[]
+  Categories     BlogCategory[]
+  Tags           BlogTag[]
 }
 
 model Media {
-  id        String   @id @default(cuid())
-  blogId    String
-  type      String   @db.VarChar(255)
-  url       String   @db.VarChar(255)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  blog      Blog     @relation(fields: [blogId], references: [id])
+  Id        String   @id @default(cuid())
+  BlogId    String
+  Type      String   @db.VarChar(255)
+  Url       String   @db.VarChar(255)
+  CreatedAt DateTime @default(now())
+  UpdatedAt DateTime @updatedAt
+  Blog      Blog     @relation(fields: [BlogId], references: [Id])
 }
 
 model Category {
-  id        String         @id @default(cuid())
-  name      String         @db.VarChar(255)
-  slug      String         @db.VarChar(255)
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
-  blogs     BlogCategory[]
+  Id        String         @id @default(cuid())
+  Name      String         @db.VarChar(255)
+  Slug      String         @db.VarChar(255)
+  CreatedAt DateTime       @default(now())
+  UpdatedAt DateTime       @updatedAt
+  Blogs     BlogCategory[]
 }
 
 model BlogCategory {
-  blogId     String
-  categoryId String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  blog       Blog     @relation(fields: [blogId], references: [id])
-  category   Category @relation(fields: [categoryId], references: [id])
-  @@id([blogId, categoryId])
+  BlogId     String
+  CategoryId String
+  CreatedAt  DateTime @default(now())
+  UpdatedAt  DateTime @updatedAt
+  Blog       Blog     @relation(fields: [BlogId], references: [Id])
+  Category   Category @relation(fields: [CategoryId], references: [Id])
+  @@id([BlogId, CategoryId])
 }
 
 model Tag {
-  id        String    @id @default(cuid())
-  name      String    @db.VarChar(255)
-  slug      String    @db.VarChar(255)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  blogs     BlogTag[]
+  Id        String    @id @default(cuid())
+  Name      String    @db.VarChar(255)
+  Slug      String    @db.VarChar(255)
+  CreatedAt DateTime  @default(now())
+  UpdatedAt DateTime  @updatedAt
+  Blogs     BlogTag[]
 }
 
 model BlogTag {
-  blogId String
-  tagId  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  blog    Blog       @relation(fields: [blogId], references: [id])
-  tag     Tag        @relation(fields: [tagId], references: [id])
-  @@id([blogId, tagId])
+  BlogId String
+  TagId  String
+  CreatedAt DateTime @default(now())
+  UpdatedAt DateTime @updatedAt
+  Blog    Blog       @relation(fields: [BlogId], references: [Id])
+  Tag     Tag        @relation(fields: [TagId], references: [Id])
+  @@id([BlogId, TagId])
 }
