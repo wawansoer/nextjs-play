@@ -12,78 +12,154 @@ generator client {
   binaryTargets = ["native", "linux-musl"]
 }
 
-model Account {
-  id                String  @id @default(uuid()) @db.Uuid 
-  userId            String  @db.Uuid
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
+// model Account {
+//   id                String  @id @default(uuid()) @db.Uuid 
+//   userId            String  @db.Uuid
+//   type              String
+//   provider          String
+//   providerAccountId String
+//   refresh_token     String? @db.Text
+//   access_token      String? @db.Text
+//   expires_at        Int?
+//   token_type        String?
+//   scope             String?
+//   id_token          String? @db.Text
+//   session_state     String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+//   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([provider, providerAccountId])
-}
+//   @@unique([provider, providerAccountId])
+// }
 
-model Session {
-  id           String   @id @default(uuid()) @db.Uuid
-  sessionToken String   @unique
-  userId       String   @db.Uuid
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
+// model Session {
+//   id           String   @id @default(uuid()) @db.Uuid
+//   sessionToken String   @unique
+//   userId       String   @db.Uuid
+//   expires      DateTime
+//   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+// }
 
-model User {
-  id                    String @id @default(uuid()) @db.Uuid
-  name                  String?
-  email                 String?   @unique
-  emailVerified         DateTime?
-  image                 String?
-  password              String?
-  passwordResetToken    String?   @unique
-  passwordResetTokenExp DateTime?
-  accounts              Account[]
-  sessions              Session[]
-}
+// model User {
+//   id                    String @id @default(uuid()) @db.Uuid
+//   name                  String?
+//   email                 String?   @unique
+//   emailVerified         DateTime?
+//   image                 String?
+//   password              String?
+//   passwordResetToken    String?   @unique
+//   passwordResetTokenExp DateTime?
+//   accounts              Account[]
+//   sessions              Session[]
+// }
 
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
+// model VerificationToken {
+//   identifier String
+//   token      String   @unique
+//   expires    DateTime
 
-  @@unique([identifier, token])
+//   @@unique([identifier, token])
+// }
+
+// model Blog {
+//   id              String   @id @default(uuid()) @db.Uuid
+//   title           String   @default("")
+//   slug            String   @unique
+//   metaTitle       String
+//   metaDescription String
+//   excerpt         String
+//   coverImage      String
+//   content         String
+//   tags            String[]
+//   author          String
+//   canonicalUrl    String?
+//   status          String   @default("draft")
+//   views           Int      @default(0)
+//   likes           Int      @default(0)
+//   date            DateTime
+//   createdAt       DateTime @default(now())
+//   updatedAt       DateTime @updatedAt
+// }
+
+// model Tag {
+//   id        String   @id @default(uuid()) @db.Uuid
+//   name      String   @unique
+//   slug      String   @unique
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
+
+model Author {
+  Id             String    @id @default(cuid())
+  Name           String    @db.VarChar(255)
+  Bio            String?
+  ProfilePicture String?   @db.VarChar(255)
+  CreatedAt      DateTime  @default(now())
+  UpdatedAt      DateTime  @updatedAt
+  Blogs          Blog[]
 }
 
 model Blog {
-  id              String   @id @default(uuid()) @db.Uuid
-  title           String   @default("")
-  slug            String   @unique
-  metaTitle       String
-  metaDescription String
-  excerpt         String
-  coverImage      String
-  content         String
-  tags            String[]
-  author          String
-  canonicalUrl    String?
-  status          String   @default("draft")
-  views           Int      @default(0)
-  likes           Int      @default(0)
-  date            DateTime
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  Id             String          @id @default(cuid())
+  AuthorId       String
+  Title          String          @db.VarChar(255)
+  Slug           String          @db.VarChar(255)
+  MetaDescription String?        @db.VarChar(255)
+  Content        String
+  FeaturedImage  String?         @db.VarChar(255)
+  CreatedAt      DateTime        @default(now())
+  UpdatedAt      DateTime        @updatedAt
+  PublishedAt    DateTime?
+  Status         String?         @db.VarChar(255)
+  Author         Author          @relation(fields: [AuthorId], references: [Id])
+  Media          Media[]
+  Categories     BlogCategory[]
+  Tags           BlogTag[]
+}
+
+model Media {
+  Id        String   @id @default(cuid())
+  BlogId    String
+  Type      String   @db.VarChar(255)
+  Url       String   @db.VarChar(255)
+  CreatedAt DateTime @default(now())
+  UpdatedAt DateTime @updatedAt
+  Blog      Blog     @relation(fields: [BlogId], references: [Id])
+}
+
+model Category {
+  Id        String         @id @default(cuid())
+  Name      String         @db.VarChar(255)
+  Slug      String         @db.VarChar(255)
+  CreatedAt DateTime       @default(now())
+  UpdatedAt DateTime       @updatedAt
+  Blogs     BlogCategory[]
+}
+
+model BlogCategory {
+  BlogId     String
+  CategoryId String
+  CreatedAt  DateTime @default(now())
+  UpdatedAt  DateTime @updatedAt
+  Blog       Blog     @relation(fields: [BlogId], references: [Id])
+  Category   Category @relation(fields: [CategoryId], references: [Id])
+  @@id([BlogId, CategoryId])
 }
 
 model Tag {
-  id        String   @id @default(uuid()) @db.Uuid
-  name      String   @unique
-  slug      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  Id        String    @id @default(cuid())
+  Name      String    @db.VarChar(255)
+  Slug      String    @db.VarChar(255)
+  CreatedAt DateTime  @default(now())
+  UpdatedAt DateTime  @updatedAt
+  Blogs     BlogTag[]
+}
+
+model BlogTag {
+  BlogId String
+  TagId  String
+  CreatedAt DateTime @default(now())
+  UpdatedAt DateTime @updatedAt
+  Blog    Blog       @relation(fields: [BlogId], references: [Id])
+  Tag     Tag        @relation(fields: [TagId], references: [Id])
+  @@id([BlogId, TagId])
 }
