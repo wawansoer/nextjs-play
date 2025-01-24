@@ -13,7 +13,7 @@ generator client {
 }
 
 model Account {
-  id                String  @id @default(uuid()) @db.Uuid 
+  id                String  @id @default(uuid()) @db.Uuid
   userId            String  @db.Uuid
   type              String
   provider          String
@@ -40,7 +40,7 @@ model Session {
 }
 
 model User {
-  id                    String @id @default(uuid()) @db.Uuid
+  id                    String    @id @default(uuid()) @db.Uuid
   name                  String?
   email                 String?   @unique
   emailVerified         DateTime?
@@ -60,30 +60,95 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model Blog {
-  id              String   @id @default(uuid()) @db.Uuid
-  title           String   @default("")
-  slug            String   @unique
-  metaTitle       String
-  metaDescription String
-  excerpt         String
-  coverImage      String
-  content         String
-  tags            String[]
-  author          String
-  canonicalUrl    String?
-  status          String   @default("draft")
-  views           Int      @default(0)
-  likes           Int      @default(0)
-  date            DateTime
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+
+model BlogTags {
+  Id        String   @id @default(uuid()) @map("Id") @db.Uuid
+  BlogId    String   @map("BlogId") @db.Uuid
+  TagId     String   @map("TagId") @db.Uuid
+  CreatedAt DateTime @default(now()) @map("CreatedAt") @db.Timestamp(6)
+  UpdatedAt DateTime @updatedAt @map("UpdatedAt") @db.Timestamp(6)
+
+  Blog Blogs @relation(fields: [BlogId], references: [Id], onDelete: Cascade)
+  Tag  Tags  @relation(fields: [TagId], references: [Id], onDelete: Cascade)
 }
 
-model Tag {
-  id        String   @id @default(uuid()) @db.Uuid
-  name      String   @unique
-  slug      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Tags {
+  Id        String     @id @default(uuid()) @map("Id") @db.Uuid
+  Name      String     @map("Name") @db.VarChar(255)
+  Slug      String     @unique @map("Slug") @db.VarChar(255)
+  CreatedAt DateTime   @default(now()) @map("CreatedAt") @db.Timestamp(6)
+  UpdatedAt DateTime   @updatedAt @map("UpdatedAt") @db.Timestamp(6)
+  Blogs     BlogTags[]
+}
+
+model BlogCategories {
+  Id         String   @id @default(uuid()) @map("Id") @db.Uuid
+  BlogId     String   @map("BlogId") @db.Uuid
+  CategoryId String   @map("CategoryId") @db.Uuid
+  CreatedAt  DateTime @default(now()) @map("CreatedAt") @db.Timestamp(6)
+  UpdatedAt  DateTime @updatedAt @map("UpdatedAt") @db.Timestamp(6)
+
+  Blog     Blogs      @relation(fields: [BlogId], references: [Id], onDelete: Cascade)
+  Category Categories @relation(fields: [CategoryId], references: [Id], onDelete: Cascade)
+}
+
+model Blogs {
+  Id              String     @id @default(uuid()) @map("Id") @db.Uuid
+  AuthorId        String     @map("AuthorId") @db.Uuid
+  Title           String     @map("Title") @db.VarChar(255)
+  Slug            String     @unique @map("Slug") @db.VarChar(255)
+  MetaDescription String     @map("MetaDescription") @db.VarChar(255)
+  Content         String     @map("Content") @db.Text
+  FeaturedImage   String?    @map("FeaturedImage") @db.VarChar(255)
+  CreatedAt       DateTime   @default(now()) @map("CreatedAt") @db.Timestamp(6)
+  UpdatedAt       DateTime   @updatedAt @map("UpdatedAt") @db.Timestamp(6)
+  PublishedAt     DateTime?  @map("PublishedAt") @db.Timestamp(6)
+  Status          BlogStatus @default(draft) @map("Status")
+
+  Author     Authors          @relation(fields: [AuthorId], references: [Id], onDelete: Cascade)
+  Categories BlogCategories[]
+  Tags       BlogTags[]
+  Media      Media[]
+}
+
+model Media {
+  Id        String    @id @default(uuid()) @map("Id") @db.Uuid
+  BlogId    String    @map("BlogId") @db.Uuid
+  Type      MediaType @map("Type")
+  Url       String    @map("Url") @db.VarChar(255)
+  CreatedAt DateTime  @default(now()) @map("CreatedAt") @db.Timestamp(6)
+  UpdatedAt DateTime  @updatedAt @map("UpdatedAt") @db.Timestamp(6)
+
+  Blog Blogs @relation(fields: [BlogId], references: [Id], onDelete: Cascade)
+}
+
+model Authors {
+  Id             String   @id @default(uuid()) @map("Id") @db.Uuid
+  Name           String   @map("Name") @db.VarChar(255)
+  Bio            String   @map("Bio") @db.Text
+  ProfilePicture String   @map("ProfilePicture") @db.VarChar(255)
+  CreatedAt      DateTime @default(now()) @map("CreatedAt") @db.Timestamp(6)
+  UpdatedAt      DateTime @updatedAt @map("UpdatedAt") @db.Timestamp(6)
+  Blogs          Blogs[]
+}
+
+model Categories {
+  Id        String           @id @default(uuid()) @map("Id") @db.Uuid
+  Name      String           @map("Name") @db.VarChar(255)
+  Slug      String           @unique @map("Slug") @db.VarChar(255)
+  CreatedAt DateTime         @default(now()) @map("CreatedAt") @db.Timestamp(6)
+  UpdatedAt DateTime         @updatedAt @map("UpdatedAt") @db.Timestamp(6)
+  Blogs     BlogCategories[]
+}
+
+enum BlogStatus {
+  draft
+  published
+  archived
+}
+
+enum MediaType {
+  image
+  video
+  audio
 }
